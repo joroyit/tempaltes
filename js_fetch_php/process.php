@@ -1,12 +1,12 @@
 <?
 // + - что то взяли, что то собрали.
 
-$arr = [
-    'cont' => '2',
-    'title' => 'item'
-];
-
-if(1) {
+if($_POST['action'] == 'get') { 
+    $arr = [
+        'cont' => '2',
+        'title' => 'item'
+    ];
+   
     $arResult = [
         'result' => $arr,
         'text' => 'success',
@@ -17,9 +17,9 @@ if(1) {
 } else {
     $arResult = [
         'result' => [],
-        'text' => 'mrthod not found',
+        'text' => 'method not found',
         'status' => 'error'
-    ]
+    ];
     echo json_encode($arResult);
 
 }

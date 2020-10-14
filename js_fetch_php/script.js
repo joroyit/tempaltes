@@ -10,7 +10,7 @@ Ajax.prototype = {
 
     joinParams: function () {
         let defaultParams = {
-            url: '/rest_bitrix/action.php'
+            url: '/js_fetch_php/process.php'
         }
 
         if(this.isEmpty(this.params)){
@@ -31,13 +31,11 @@ Ajax.prototype = {
         return true;
     },
 
-    processAjax(){
-
-        fetch(this.params.url,{
+    processAjax(body, url = this.params.url){
+        return fetch(url,{
             method: 'POST',
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: 'action=write'
-
+            body: body
         })
             .then((res) => {
                 this.respons = res;
@@ -46,73 +44,54 @@ Ajax.prototype = {
                 } else {
                     throw new Error("Ошибка сети");                  
                 }
-            })
-            
-    }
+            })        
+    },
 
     bindEvend: function(){
-        document.querySelector('.js-action.write').addEventListener('click', this.writeTable.bind(this))
+        document.querySelector('.js-tab.get').addEventListener('click', this.getTable.bind(this))
     },
     
-    writeTable: function(e){
+    getTable: function(e){
         let btn = e.target;
 
         if(btn.classList.value.search(/waiting/gi) >= 0) {
             return false;
         }
 
-        if(btn.classList.value.search(/warning/gi) >= 0){
-            if(!confirm("снова выполнить запись ? - google банит за спам")) {
-                return false;
-            } 
-        }
-
-        let nodeResult = btn.closest('.control').querySelector('.result'),
-        text = btn.innerHTML;
+        let nodeResult = btn.closest('.xxx').querySelector('.result'),
+        btnText = btn.innerHTML;
         
         btn.innerHTML = "Идет операция...";
         btn.classList.add('waiting');  
         
-        let response = fetch(this.params.url,{
-            method: 'POST',
-            headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: 'action=write'
-
-        })
-            .then((res) => {
-                this.respons = res;
-                if(res.ok === true) {
-                    return res.json();
-                } else {
-                    throw new Error("Ошибка сети");                  
-                }
-            })
-            .then(json => {
+        let response = this.processAjax('action=get',)
+            .then((json) => {
                 if(typeof(json) == 'object' && !this.isEmpty(json) && json.status == 'ok') {
-                    btn.innerHTML = text;
-                    nodeResult.classList.add('success');
-                    btn.classList.add('warning');
-                    nodeResult.innerHTML = json.text;
+                    this.outTableDate(json,nodeResult);
+                    btn.innerHTML = btnText;
                     btn.classList.remove('waiting');
                 } else {
-                    btn.innerHTML = text;
-                    nodeResult.classList.add('bad');
-                    nodeResult.innerHTML = 'что то пошло не так... (json)';
-                    console.log(json)       
+                    btn.innerHTML = "Пустой... json";
+                    console.log(this.respons);
+                    console.log(json);
                 }
+
             })
             .catch((error) => {
-                btn.innerHTML = text;
-                nodeResult.classList.add('bad');
-                nodeResult.innerHTML = 'что то пошло не так...';
-                alert(
-                    error +'\n'
-                    + 'status code: ' + this.respons.status + "\n"
-                    + 'url: ' + this.respons.url
-                ) 
-            })        
+                btn.innerHTML = "Ошибка...";
+                console.log(this.respons);
+                console.log(error);
+                
+            })
+            
+    },
 
+    outTableDate (json, node) {
+        console.log(json);
+        console.log(node);
     }
+
+
 }   
 
 var ajax = new Ajax();

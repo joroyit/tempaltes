@@ -7,11 +7,13 @@
 
 <div class="xxx">
     <div class="control">
-        <button class="js-tab">action 1</button>
-        <button class="js-tab">action 2</button>
+        <button class="js-tab get">action 1G<div class="progress"></button>
+        <button class="js-tab write">action 2W<div class="progress"></button>
     </div>
-    <div class="result"></div>
+    <div class="result"></div></div>
 </div>
-    
+
+<link rel="stylesheet" href="style.css">
+<script src="script.js"></script>
 </body>
 </html>
