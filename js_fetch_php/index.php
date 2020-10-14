@@ -7,8 +7,8 @@
 
 <div class="xxx">
     <div class="control">
-        <button class="js-tab get">action 1G<div class="progress"></button>
-        <button class="js-tab write">action 2W<div class="progress"></button>
+        <button class="js-tab get">action 1G</button>
+        <button class="js-tab write">action 2W</button>
     </div>
     <div class="result"></div></div>
 </div>
