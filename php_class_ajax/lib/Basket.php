@@ -10,14 +10,18 @@ class Basket
     {
         #code...
         if(1) {
-            $this->respons($date);
+            $this->respons($date, true);
         }
     }
 
-    private function respons($msg) 
+    private function respons($msg, $type = false) 
     {
         header('Content-type: application/json');
-        echo json_encode(['status' => 'error', 'msg' => $msg]);
+        if($type) {
+            echo json_encode(['status' => 'ok', 'msg' => $msg]);
+        } else {
+            echo json_encode(['status' => 'error', 'msg' => $msg]);
+        }
     }
     
 }
